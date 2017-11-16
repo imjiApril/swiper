@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>swiper gallery</title>
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- swiper css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/css/swiper.min.css">
+    <!-- mySwiper css -->
+    <link rel="stylesheet" href="mySwiper.css">
+    <!-- jquery js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- swiper js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/js/swiper.min.js"></script>
+
+    <!-- mySwiper -->
+    <script>
+      $(function(){
+
+        //슬라이드 이미지 생성
+        for(var i=1; i<=10; i++){
+          $('.swiper-wrapper').append(
+            '<div class="swiper-slide">'
+           +'<img src="img/cat'+i+'.jpg" alt="고양이'+i+'">'
+           +'</div>'
+          )
+        }
+
+        //swiper 생성
+        var swiper1 = new Swiper('.swiper1',{
+          pagination:'.swiper-pagination',
+          nextButton:'.swiper-button-next',
+          prevButton:'.swiper-button-prev',
+          paginationClickable:true,
+          autoplay:2000,
+          //swiper를 제어할 때 자동재생 멈춤(이전,다음,페이지)
+          autoplayDisableOnInteraction:true
+        });
+
+        //재생/정지버튼
+        playFlag=true;
+
+        $('#stopPlay').click(function(){
+          if(playFlag){
+            swiper1.stopAutoplay();//대소문자 구분잘하세용...
+            playFlag=false;
+            $(this).find('i').attr('class','fa fa-play');
+          }else{
+            swiper1.startAutoplay();
+            playFlag=true;
+            $(this).find('i').attr('class','fa fa-stop');
+          }
+        })
+
+        //이전,다음,페이지,이미지를 누르면 자동재생 정지
+        $('[class*=swiper-button], [class*=swiper-pagination], .swiper-slide img')
+        .click(function(){
+          swiper1.stopAutoplay();//대소문자 구분잘하세용...
+          playFlag=false;
+          $('#stopPlay').find('i').attr('class','fa fa-play');
+        })
+
+        //팝업창 열기
+        $('.swiper1 img').click(function(){
+          //이미지를 클릭했을 때 alt, src의 값을 얻어옴.
+          var name=$(this).attr('alt');
+          var src=$(this).attr('src');
+          //클릭한 이미지가 몇번째에 해당되는지 구하기
+          imgIndex=$('.swiper-slide img').index(this);
+          $('#popup h3').text(name);
+          $('#popup img').attr({'src':src,'alt':name});
+          $('#popup').fadeIn();
+        })
+
+        //팝업창 닫기
+        $('#close').click(function(){
+          $('#popup').fadeOut();
+        })
+
+        //팝업창 이전/다음 버튼
+        $('#popup .arrow').click(function(){
+          //이미지의 수 구하기
+          var imageLength=$('.swiper-slide').length;
+          //이전인지 다음인지 검사(클릭한 대상에 next라는 클래스가 있는지 검사)
+          if($(this).hasClass('next')){//다음
+            imgIndex++;//증가
+          }else{//이전
+            imgIndex--;//감소
+          }
+          //인덱스 최대/최소 검사
+          if(imageLength<=imgIndex){
+            imgIndex=0;
+          }else if(imgIndex<0){
+            imgIndex=imageLength-1;
+          }
+          console.log(imgIndex);
+          //제어문을 통해 구한 인덱스값으로 해당 이미지의 src, alt값 구하기
+          var imgSrc=$('.swiper-slide img').eq(imgIndex).attr('src');
+          var imgTitle=$('.swiper-slide img').eq(imgIndex).attr('alt');
+
+          //팝업이미지 변경
+          $('#popup img').attr({
+            'src':imgSrc,
+            'alt':imgTitle
+          });
+
+          //팝업제목 변경
+          $('#popup h3').text(imgTitle);
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <h1>SWIPER GALLERY</h1>
+    <section>
+      <!-- 컨테이너 -->
+      <div class="swiper-container swiper1">
+        <div class="swiper-wrapper"></div>
+      </div>
+      <!-- 페이지 -->
+      <div class="swiper-pagination"></div>
+      <!-- 이전/다음 -->
+      <div class="swiper-button-next">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </div>
+      <div class="swiper-button-prev">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </div>
+      <!-- 재생/정지 -->
+      <button id="stopPlay">
+        <i class="fa fa-stop" aria-hidden="true"></i>
+      </button>
+    </section>
+
+    <!-- 팝업 -->
+    <div id="popup">
+      <div id="popup-contents">
+        <div class="top">
+          <h3>이미지제목</h3>
+          <button id="close">닫기</button>
+        </div>
+        <img src="img/cat1.jpg" alt="고양이1">
+        <!-- 이전/다음버튼 -->
+        <button class="arrow next">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </button>
+        <button class="arrow prev">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+  </body>
+</html>

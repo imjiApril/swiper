@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>swiper 테스트</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/css/swiper.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/js/swiper.min.js"></script>
+    <style>
+    html,body{
+      height:100%;
+    }
+    body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color:#000;
+        margin: 0;
+        padding: 0;
+    }
+    h2{text-align: center;}
+    .swiper-container {
+        width: 100%;
+        height: 200px;
+    }
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+    .pagination1 .swiper-pagination-bullet{
+      width:16px; height:16px;
+      color: #fff;
+    }
+    .pagination1 .swiper-pagination-bullet-active{
+      background: pink;
+    }
+    .swiper3{
+      height:auto;
+    }
+    .swiper3 .swiper-slide{
+      height:100px;
+    }
+    </style>
+    <script>
+      $(function(){
+        //정지/재생버튼
+        $('#stop').click(function(){
+          swiper2.stopAutoplay();
+        })
+        $('#start').click(function(){
+          swiper2.startAutoplay();
+        })
+        playFlag=true;
+        //정지/재생버튼을 하나로 합치기
+        $('#stopPlay').click(function(){
+          if(playFlag){
+            swiper2.stopAutoplay();
+            playFlag=false;
+            $(this).text('재생');
+          }else{
+            swiper2.startAutoplay();
+            playFlag=true;
+            $(this).text('정지');
+          }
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <!-- Swiper -->
+    <h2>첫번째 swiper</h2>
+    <div class="swiper-container swiper1">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+            <div class="swiper-slide">Slide 4</div>
+            <div class="swiper-slide">Slide 5</div>
+            <div class="swiper-slide">Slide 6</div>
+        </div>
+        <!-- pagination -->
+        <div class="swiper-pagination pagination1"></div>
+        <!-- arrows -->
+        <div class="swiper-button-next next1"></div>
+        <div class="swiper-button-prev prev1"></div>
+    </div>
+
+    <h2>두번째 swiper</h2>
+    <div class="swiper-container swiper2">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+            <div class="swiper-slide">Slide 4</div>
+            <div class="swiper-slide">Slide 5</div>
+            <div class="swiper-slide">Slide 6</div>
+        </div>
+        <!-- pagination -->
+        <div class="swiper-pagination pagination2"></div>
+        <!-- arrows -->
+        <div class="swiper-button-next next2"></div>
+        <div class="swiper-button-prev prev2"></div>
+    </div>
+    <button id="stop">정지</button>
+    <button id="start">재생</button>
+    <button id="stopPlay">정지</button>
+
+    <h2>세번째 swiper</h2>
+    <div class="swiper-container swiper3">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+            <div class="swiper-slide">Slide 4</div>
+            <div class="swiper-slide">Slide 5</div>
+            <div class="swiper-slide">Slide 6</div>
+        </div>
+        <!-- scrollbar -->
+        <div class="swiper-scrollbar scrollbar1"></div>
+    </div>
+
+    <!-- Initialize Swiper -->
+    <script>
+    //Swiper() 생성자
+    var swiper1 = new Swiper('.swiper1',{
+        pagination:'.pagination1',
+        paginationClickable:true,//페이지버튼클릭 활성화여부
+        nextButton:'.next1',
+        prevButton:'.prev1',
+        spaceBetween:20,//슬라이드 사이의 간격
+        loop:false,//루프
+        slidesPerView:3,//한페이지당 슬라이드 수
+        //autoplay:1000,//자동재생
+        autoplayDisableOnInteraction:true,//자동재생일때 제어여부
+        direction:'horizontal',//슬라이드 방향 horizontal|vertical
+        paginationBulletRender:function(swiper,index,className){
+          return '<span class="'+className+'">'+(index+1)+'</span>';
+        },
+        effect: 'flip',        
+    });
+
+    var swiper2 = new Swiper('.swiper2',{
+        pagination:'.pagination2',
+        paginationClickable:true,//페이지버튼클릭 활성화여부
+        nextButton:'.next2',
+        prevButton:'.prev2',
+        loop:true,
+        autoplay:2000,
+        paginationType:'progress'//페이지 타입변경 fraction|progress|bullets
+    });
+
+    var swiper3 = new Swiper('.swiper3',{
+      scrollbar:'.scrollbar1',
+      slidesPerView:2,
+      spaceBetween:20,
+      freeMode: true,
+      slidesPerColumn: 2,//줄 수
+    });
+
+
+    </script>
+  </body>
+</html>
